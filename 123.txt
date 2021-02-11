@@ -1,0 +1,151 @@
+
+CREATE TABLE Pa_Users(
+	`ID` int AUTO_INCREMENT NOT NULL,
+	`Parts_id` int NOT NULL,
+	`User_ID` int NOT NULL,
+PRIMARY KEY 
+(
+	`ID` ASC
+) 
+);
+CREATE TABLE Participants(
+	`ID` int AUTO_INCREMENT NOT NULL,
+	`Team_ID` int NOT NULL,
+	`Role_Name` nvarchar(100) NOT NULL,
+	`Is_Admin` Tinyint NULL,
+PRIMARY KEY 
+(
+	`ID` ASC
+) 
+);
+CREATE TABLE Pr_Roles(
+	`ID` int AUTO_INCREMENT NOT NULL,
+	`Proj_ID` int NOT NULL,
+	`Role_Name` varchar(100) NOT NULL,
+	`Is_Admin` Tinyint NULL,
+PRIMARY KEY 
+(
+	`ID` ASC
+) 
+);
+ 
+CREATE TABLE Pr_Tasks(
+	`ID` int AUTO_INCREMENT NOT NULL,
+	`Proj_ID` int NOT NULL,
+	`Task_Name` varchar(255) NOT NULL,
+	`Creator_ID` int NOT NULL,
+	`Performer_ID` int NOT NULL,
+	`IsActive` Tinyint NOT NULL,
+	`Time_Spent` int NOT NULL,
+PRIMARY KEY 
+(
+	`ID` ASC
+) 
+);
+CREATE TABLE Projects(
+	`ID` int AUTO_INCREMENT NOT NULL,
+	`Team_ID` int NOT NULL,
+	`Project_Name` varchar(255) NOT NULL,
+	`IsActive` Tinyint NOT NULL,
+PRIMARY KEY 
+(
+	`ID` ASC
+) 
+);
+CREATE TABLE PrRo_Users(
+	`ID` int AUTO_INCREMENT NOT NULL,
+	`PrRoles_ID` int NOT NULL,
+	`User_ID` int NOT NULL,
+PRIMARY KEY 
+(
+	`ID` ASC
+) 
+);
+CREATE TABLE PrTa_Jobs(
+	`ID` int AUTO_INCREMENT NOT NULL,
+	`Task_ID` int NOT NULL,
+	`StartDate` datetime(3) NOT NULL,
+	`Duration` int NOT NULL,
+	`Job_Description` varchar(4000) NULL,
+PRIMARY KEY 
+(
+	`ID` ASC
+) 
+);
+ 
+CREATE TABLE Screenshots(
+	`ID` int AUTO_INCREMENT NOT NULL,
+	`User_ID` int NOT NULL,
+	`Job_ID` int NOT NULL,
+	`Screen` Longblob NULL,
+PRIMARY KEY 
+(
+	`ID` ASC
+) 
+); 
+CREATE TABLE Teams(
+	`ID` int AUTO_INCREMENT NOT NULL,
+	`Creator_ID` int NOT NULL,
+	`Team_Name` varchar(255) NOT NULL,
+PRIMARY KEY 
+(
+	`ID` ASC
+) 
+);
+CREATE TABLE Users(
+	`Id` int AUTO_INCREMENT NOT NULL,
+	`Username` varchar(50) NOT NULL,
+	`Password` varchar(50) NULL,
+PRIMARY KEY 
+(
+	`Id` ASC
+) 
+);
+ALTER TABLE `dbo`.`Participants` ADD  DEFAULT ((0)) FOR `Is_Admin`;
+ALTER TABLE `dbo`.`Pr_Roles` ADD  DEFAULT ((0)) FOR `Is_Admin`;
+ALTER TABLE `dbo`.`Pr_Tasks` ADD  DEFAULT ((1)) FOR `IsActive`;
+ALTER TABLE `dbo`.`Pr_Tasks` ADD  DEFAULT ((0)) FOR `Time_Spent`;
+ALTER TABLE `dbo`.`Projects` ADD  DEFAULT ((1)) FOR `IsActive`;
+ALTER TABLE `dbo`.`Pa_Users`  ADD  CONSTRAINT `FK_PaUsParts` FOREIGN KEY(`Parts_id`)
+REFERENCES `dbo`.`Participants` (`ID`);
+ALTER TABLE `dbo`.`Pa_Users` CHECK CONSTRAINT `FK_PaUsParts`;
+ALTER TABLE `dbo`.`Pa_Users`  ADD  CONSTRAINT `FK_PaUsUsers` FOREIGN KEY(`User_ID`)
+REFERENCES Users (`Id`);
+ALTER TABLE `dbo`.`Pa_Users` CHECK CONSTRAINT `FK_PaUsUsers`;
+ALTER TABLE `dbo`.`Participants`  ADD  CONSTRAINT `FK_TeamParts` FOREIGN KEY(`Team_ID`)
+REFERENCES Teams (`ID`);
+ALTER TABLE `dbo`.`Participants` CHECK CONSTRAINT `FK_TeamParts`;
+ALTER TABLE `dbo`.`Pr_Roles`  ADD  CONSTRAINT `FK_ProjPrRoles` FOREIGN KEY(`Proj_ID`)
+REFERENCES Projects (`ID`);
+ALTER TABLE `dbo`.`Pr_Roles` CHECK CONSTRAINT `FK_ProjPrRoles`;
+ALTER TABLE `dbo`.`Pr_Tasks`  ADD  CONSTRAINT `FK_ProjTask` FOREIGN KEY(`Proj_ID`)
+REFERENCES Projects (`ID`);
+ALTER TABLE `dbo`.`Pr_Tasks` CHECK CONSTRAINT `FK_ProjTask`;
+ALTER TABLE `dbo`.`Pr_Tasks`  ADD  CONSTRAINT `FK_UserTaskCreator` FOREIGN KEY(`Creator_ID`)
+REFERENCES Users (`Id`);
+ALTER TABLE `dbo`.`Pr_Tasks` CHECK CONSTRAINT `FK_UserTaskCreator`;
+ALTER TABLE `dbo`.`Pr_Tasks`  ADD  CONSTRAINT `FK_UserTaskPerformer` FOREIGN KEY(`Performer_ID`)
+REFERENCES Users (`Id`);
+ALTER TABLE `dbo`.`Pr_Tasks` CHECK CONSTRAINT `FK_UserTaskPerformer`;
+ALTER TABLE `dbo`.`Projects`  ADD  CONSTRAINT `FK_TeamProj` FOREIGN KEY(`Team_ID`)
+REFERENCES Teams(`ID`);
+ALTER TABLE `dbo`.`Projects` CHECK CONSTRAINT `FK_TeamProj`;
+ALTER TABLE `dbo`.`PrRo_Users` ADD  CONSTRAINT `FK_PrRolesPrRoUsers` FOREIGN KEY(`PrRoles_ID`)
+REFERENCES Pr_Roles (`ID`);
+ALTER TABLE `dbo`.`PrRo_Users` CHECK CONSTRAINT `FK_PrRolesPrRoUsers`;
+ALTER TABLE `dbo`.`PrRo_Users`  ADD  CONSTRAINT `FK_UsersPrRoUsers` FOREIGN KEY(`User_ID`)
+REFERENCES Users (`Id`);
+ALTER TABLE `dbo`.`PrRo_Users` CHECK CONSTRAINT `FK_UsersPrRoUsers`;
+ALTER TABLE `dbo`.`PrTa_Jobs` ADD  CONSTRAINT `FK_TaskJob` FOREIGN KEY(`Task_ID`)
+REFERENCES Pr_Tasks (`ID`);
+ALTER TABLE `dbo`.`PrTa_Jobs` CHECK CONSTRAINT `FK_TaskJob`;
+ALTER TABLE `dbo`.`Screenshots` ADD  CONSTRAINT `FK_JobScreen` FOREIGN KEY(`Job_ID`)
+REFERENCES PrTa_Jobs (`ID`);
+ALTER TABLE `dbo`.`Screenshots` CHECK CONSTRAINT `FK_JobScreen`;
+ALTER TABLE `dbo`.`Screenshots`  ADD  CONSTRAINT `FK_UserScreen` FOREIGN KEY(`User_ID`)
+REFERENCES Users (`Id`);
+ALTER TABLE `dbo`.`Screenshots` CHECK CONSTRAINT `FK_UserScreen`;
+ALTER TABLE `dbo`.`Teams`  ADD  CONSTRAINT `FK_UserTeam` FOREIGN KEY(`Creator_ID`)
+REFERENCES Users (`Id`);
+ALTER TABLE `dbo`.`Teams` CHECK CONSTRAINT `FK_UserTeam`;
+USE `master`;

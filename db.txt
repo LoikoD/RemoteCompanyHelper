@@ -1,0 +1,20 @@
+create table Users
+(Id int not null primary key,
+Username nvarchar(50) not null,
+Password nvarchar(50) not null);
+
+create table Screenshots
+(Id int identity(1,1) primary key,
+UserId int not null foreign key references Users);
+
+insert into Users values
+(1, 'Admin', 'admin');
+
+insert into Screenshots (UserId) values(1);
+
+select * from users;
+select * from Screenshots;
+
+drop table Screenshots;
+
+insert Screenshots (UserId) output inserted.id values (1);

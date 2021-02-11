@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="RemoteCompanyHelper.Views.ProjectView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:local="clr-namespace:RemoteCompanyHelper.Views"
+        mc:Ignorable="d"
+        d:DesignHeight="590" d:DesignWidth="1260">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="15"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="15"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3">
+            <TextBlock Style="{StaticResource BaseText}" Text="{Binding ProjectName}" FontSize="{StaticResource SuperBig}"/>
+            <TextBlock Style="{StaticResource BaseText}" Text="{Binding ProjectStatus, StringFormat=Статус: \{0\}}" FontSize="{StaticResource Big}"/>
+        </StackPanel>
+        <Border Grid.Column="1" Grid.Row="3"
+                CornerRadius="20" Background="{StaticResource MediumBaseBrush}">
+            <Border.Effect>
+                <DropShadowEffect Color="#111" Direction="225" ShadowDepth="7"/>
+            </Border.Effect>
+            <StackPanel>
+                <Border Background="{StaticResource HardBaseBrush}" CornerRadius="20 20 0 0">
+                    <TextBlock Style="{StaticResource BaseText}" Text="Все задачи"
+                           FontSize="{StaticResource SuperBig}" HorizontalAlignment="Center"/>
+                </Border>
+                <ListView  SelectedItem="{Binding ASelectedTask}"
+                           ItemsSource="{Binding AllTasks}"
+                           Style="{StaticResource BaseListView}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate >
+                            <StackPanel Orientation="Vertical"
+                                        HorizontalAlignment="Left"
+                                        cal:Message.Attach="[Event MouseLeftButtonUp] = [Action AllTaskSelectedCommand]">
+                                <TextBlock Text="{Binding Path=TaskName, StringFormat=Тема: \{0\}}"
+                                           Style="{StaticResource BaseText}"/>
+                                <TextBlock Text="{Binding Path=Performer.UserName, StringFormat=Исполнитель: \{0\}}"
+                                           Style="{StaticResource BaseText}"/>
+                                <TextBlock Text="{Binding Path=Status, StringFormat=Статус: \{0\}}"
+                                           Style="{StaticResource BaseText}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </Border>
+        <Border Grid.Column="3" Grid.Row="3"
+                CornerRadius="20" Background="{StaticResource MediumBaseBrush}">
+            <Border.Effect>
+                <DropShadowEffect Color="#111" Direction="225" ShadowDepth="7"/>
+            </Border.Effect>
+            <StackPanel>
+                <Border Background="{StaticResource HardBaseBrush}" CornerRadius="20 20 0 0">
+                    <TextBlock Style="{StaticResource BaseText}" Text="Мои задачи"
+                           FontSize="{StaticResource SuperBig}" HorizontalAlignment="Center"/>
+                </Border>
+                <ListView  ItemsSource="{Binding MyTasks}"  SelectedItem="{Binding MSelectedTask}"
+                           Style="{StaticResource BaseListView}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate >
+                            <StackPanel Orientation="Vertical"
+                                        HorizontalAlignment="Left"
+                                        cal:Message.Attach="[Event MouseLeftButtonUp] = [Action MyTaskSelectedCommand]">
+
+                                <TextBlock Text="{Binding Path=TaskName, StringFormat=Тема: \{0\}}"
+                                           Style="{StaticResource BaseText}"/>
+                                <TextBlock Text="{Binding Path=Performer.UserName, StringFormat=Исполнитель: \{0\}}"
+                                           Style="{StaticResource BaseText}"/>
+                                <TextBlock Text="{Binding Path=Status, StringFormat=Статус: \{0\}}"
+                                           Style="{StaticResource BaseText}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </Border>
+        <StackPanel Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
+            <Button x:Name="OpenTask" Style="{StaticResource BaseButton}" Width="150" Height="60" FontSize="{StaticResource Big}" Margin="0 0 10 0">
+                <TextBlock TextWrapping="Wrap" Text="Открыть задачу" TextAlignment="Center"/>
+            </Button>
+            <Button x:Name="OpenJobs" Style="{StaticResource BaseButton}" Width="150" Height="60" FontSize="{StaticResource Big}" Margin="0 0 10 0">
+                <TextBlock TextWrapping="Wrap" Text="Проверить работы" TextAlignment="Center"/>
+            </Button>
+            <Button x:Name="CreateTask" Style="{StaticResource BaseButton}" Width="150" Height="60" FontSize="{StaticResource Big}" Margin="0 0 10 0">
+                <TextBlock TextWrapping="Wrap" Text="Создать задачу" TextAlignment="Center"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>
