@@ -1,0 +1,5 @@
+# Секреты и выгрузки — не коммитить!
+credentials*.csv
+confirmations*.csv
+employees.csv
+*.env
